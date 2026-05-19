@@ -1,0 +1,9 @@
+{
+  "name": "todo-simples-vercel",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Aplicativo simples de tarefas com notificacoes locais para deploy na Vercel",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}
