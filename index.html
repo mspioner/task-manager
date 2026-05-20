@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToDo - Personal App</title>
+  <title>ToDo - Slack Test</title>
   <style>
     :root {
       --bg: #f5f5f5;
@@ -13,216 +13,51 @@
       --border: #dddddd;
       --primary: #0f766e;
       --primary-hover: #115e59;
-      --danger: #b91c1c;
-      --success: #15803d;
-      --info: #1d4ed8;
+      --slack: #4a154b;
+      --slack-hover: #611f69;
       --shadow: 0 8px 24px rgba(0,0,0,0.08);
       --radius: 12px;
     }
-
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .app {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
-    }
-
-    .subtitle {
-      margin: 0 0 24px;
-      color: var(--muted);
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-    }
-
-    @media (min-width: 640px) {
-      .grid.two {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-
-    input, select, textarea, button {
-      width: 100%;
-      font: inherit;
-      border-radius: 10px;
-    }
-
-    input, select, textarea {
-      border: 1px solid var(--border);
-      padding: 12px;
-      background: #fff;
-    }
-
-    textarea {
-      min-height: 84px;
-      resize: vertical;
-    }
-
-    button {
-      border: 0;
-      padding: 12px 14px;
-      cursor: pointer;
-      min-height: 44px;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover { background: var(--primary-hover); }
-
-    .btn-secondary {
-      background: #e7e7e7;
-      color: var(--text);
-    }
-
-    .btn-info {
-      background: #dbeafe;
-      color: var(--info);
-    }
-
-    .toolbar {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-      margin-bottom: 16px;
-    }
-
-    @media (min-width: 640px) {
-      .toolbar {
-        grid-template-columns: 1fr 200px 180px;
-        align-items: end;
-      }
-    }
-
-    .status {
-      font-size: 14px;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-
-    .debug {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      font-size: 13px;
-      color: #334155;
-      white-space: pre-wrap;
-    }
-
-    .task-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .task-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
-      background: #fff;
-    }
-
-    .task-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .task-title {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    .task-title.done {
-      text-decoration: line-through;
-      color: var(--muted);
-    }
-
-    .task-meta {
-      margin-top: 8px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .task-note {
-      margin-top: 8px;
-      font-size: 14px;
-    }
-
-    .task-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .task-actions button {
-      width: auto;
-      padding: 10px 12px;
-    }
-
-    .done-badge,
-    .late-badge,
-    .soon-badge {
-      display: inline-block;
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      margin-top: 8px;
-      font-weight: bold;
-    }
-
-    .done-badge { background: #dcfce7; color: var(--success); }
-    .late-badge { background: #fee2e2; color: var(--danger); }
-    .soon-badge { background: #fef3c7; color: #92400e; }
-
-    .empty {
-      color: var(--muted);
-      text-align: center;
-      padding: 18px;
-    }
+    body { margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .app { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { margin:0 0 8px; font-size:32px; }
+    .subtitle { margin:0 0 24px; color:var(--muted); }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; margin-bottom:16px; }
+    .grid { display:grid; gap:12px; grid-template-columns:1fr; }
+    @media (min-width: 640px) { .grid.two { grid-template-columns:1fr 1fr; } }
+    label { display:block; font-size:14px; margin-bottom:6px; font-weight:bold; }
+    input, select, textarea, button { width:100%; font:inherit; border-radius:10px; }
+    input, select, textarea { border:1px solid var(--border); padding:12px; background:#fff; }
+    textarea { min-height:84px; resize:vertical; }
+    button { border:0; padding:12px 14px; cursor:pointer; min-height:44px; }
+    .btn-primary { background:var(--primary); color:#fff; }
+    .btn-primary:hover { background:var(--primary-hover); }
+    .btn-slack { background:var(--slack); color:#fff; }
+    .btn-slack:hover { background:var(--slack-hover); }
+    .btn-secondary { background:#e7e7e7; color:var(--text); }
+    .toolbar { display:grid; gap:12px; grid-template-columns:1fr; margin-bottom:16px; }
+    @media (min-width: 640px) { .toolbar { grid-template-columns:1fr 200px 180px; align-items:end; } }
+    .status { font-size:14px; color:var(--muted); margin-top:10px; }
+    .task-list { display:grid; gap:12px; }
+    .task-item { border:1px solid var(--border); border-radius:var(--radius); padding:14px; background:#fff; }
+    .task-title { margin:0; font-size:18px; }
+    .task-title.done { text-decoration:line-through; color:var(--muted); }
+    .task-meta { margin-top:8px; font-size:14px; color:var(--muted); }
+    .task-note { margin-top:8px; font-size:14px; }
+    .task-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .task-actions button { width:auto; padding:10px 12px; }
+    .done-badge,.late-badge,.soon-badge { display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; margin-top:8px; font-weight:bold; }
+    .done-badge { background:#dcfce7; color:#15803d; }
+    .late-badge { background:#fee2e2; color:#b91c1c; }
+    .soon-badge { background:#fef3c7; color:#92400e; }
+    .empty { color:var(--muted); text-align:center; padding:18px; }
   </style>
 </head>
 <body>
   <main class="app">
     <h1>ToDo - Personal App</h1>
-    <p class="subtitle">Adicione tarefas e receba um lembrete perto do horário.</p>
+    <p class="subtitle">Adicione tarefas e teste envio de lembrete para o Slack.</p>
 
     <section class="card">
       <div class="grid two">
@@ -259,16 +94,10 @@
 
       <div class="grid two" style="margin-top:12px;">
         <button id="saveBtn" class="btn-primary">Salvar tarefa</button>
-        <button id="notifyBtn" class="btn-secondary">Ativar notificações</button>
+        <button id="testSlackBtn" class="btn-slack">Testar envio no Slack</button>
       </div>
 
-      <div class="grid two" style="margin-top:12px;">
-        <button id="testNotifyBtn" class="btn-info">Testar notificação</button>
-        <button id="checkNowBtn" class="btn-secondary">Verificar lembretes agora</button>
-      </div>
-
-      <p id="notifyStatus" class="status">Status das notificações: não verificado.</p>
-      <div id="debugBox" class="debug">Logs de depuração aparecerão aqui.</div>
+      <p id="slackStatus" class="status">Status do Slack: aguardando teste.</p>
     </section>
 
     <section class="card">
@@ -294,42 +123,26 @@
 
   <script>
     const STORAGE_KEY = 'todo-simples-tasks';
-    const CHECK_INTERVAL_MS = 15000;
-    const NOTIFICATION_GRACE_MS = 5 * 60 * 1000;
-
     const titleEl = document.getElementById('title');
     const dateEl = document.getElementById('date');
     const timeEl = document.getElementById('time');
     const noteEl = document.getElementById('note');
     const reminderEl = document.getElementById('reminder');
     const saveBtn = document.getElementById('saveBtn');
-    const notifyBtn = document.getElementById('notifyBtn');
-    const testNotifyBtn = document.getElementById('testNotifyBtn');
-    const checkNowBtn = document.getElementById('checkNowBtn');
-    const notifyStatus = document.getElementById('notifyStatus');
-    const debugBox = document.getElementById('debugBox');
+    const testSlackBtn = document.getElementById('testSlackBtn');
+    const slackStatus = document.getElementById('slackStatus');
     const taskList = document.getElementById('taskList');
     const filterEl = document.getElementById('filter');
     const searchEl = document.getElementById('search');
     const clearDoneBtn = document.getElementById('clearDone');
 
     let tasks = [];
-    let intervalId = null;
-
-    function logDebug(message) {
-      const timestamp = new Date().toLocaleTimeString('pt-BR');
-      const current = debugBox.textContent || '';
-      debugBox.textContent = `[${timestamp}] ${message}\n` + current.split('\n').slice(0, 14).join('\n');
-      console.log('[TODO DEBUG]', message);
-    }
 
     function loadTasks() {
       try {
         tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        logDebug(`Tarefas carregadas: ${tasks.length}`);
       } catch {
         tasks = [];
-        logDebug('Falha ao ler localStorage. Lista reiniciada.');
       }
     }
 
@@ -372,16 +185,12 @@
 
         return `
           <article class="task-item">
-            <div class="task-top">
-              <div>
-                <h2 class="task-title ${task.done ? 'done' : ''}">${escapeHtml(task.title)}</h2>
-                <div class="task-meta">${formatDateTime(`${task.date}T${task.time}`)} · lembrete ${task.reminder} min antes</div>
-                ${task.note ? `<div class="task-note">${escapeHtml(task.note)}</div>` : ''}
-                ${task.done ? '<span class="done-badge">Concluída</span>' : ''}
-                ${isLate ? '<span class="late-badge">Atrasada</span>' : ''}
-                ${isSoon ? '<span class="soon-badge">Acontece em breve</span>' : ''}
-              </div>
-            </div>
+            <h2 class="task-title ${task.done ? 'done' : ''}">${escapeHtml(task.title)}</h2>
+            <div class="task-meta">${formatDateTime(`${task.date}T${task.time}`)} · lembrete ${task.reminder} min antes</div>
+            ${task.note ? `<div class="task-note">${escapeHtml(task.note)}</div>` : ''}
+            ${task.done ? '<span class="done-badge">Concluída</span>' : ''}
+            ${isLate ? '<span class="late-badge">Atrasada</span>' : ''}
+            ${isSoon ? '<span class="soon-badge">Acontece em breve</span>' : ''}
             <div class="task-actions">
               <button class="btn-secondary" onclick="toggleTask('${task.id}')">${task.done ? 'Reabrir' : 'Concluir'}</button>
               <button class="btn-secondary" onclick="editTask('${task.id}')">Editar</button>
@@ -411,95 +220,36 @@
       saveBtn.textContent = 'Salvar tarefa';
     }
 
-    function updateNotificationStatus() {
-      if (!('Notification' in window)) {
-        notifyStatus.textContent = 'Status das notificações: navegador não suporta.';
-        logDebug('Notification API não suportada neste navegador.');
-        return;
-      }
-      if (window.isSecureContext === false) {
-        notifyStatus.textContent = 'Status das notificações: página sem contexto seguro (HTTPS).';
-        logDebug('Página sem contexto seguro. Notificações podem falhar fora de HTTPS.');
-        return;
-      }
-      if (Notification.permission === 'granted') {
-        notifyStatus.textContent = 'Status das notificações: permitido.';
-      } else if (Notification.permission === 'denied') {
-        notifyStatus.textContent = 'Status das notificações: bloqueado.';
-      } else {
-        notifyStatus.textContent = 'Status das notificações: aguardando permissão.';
-      }
-    }
+    async function testSlack() {
+      const title = titleEl.value.trim() || 'Teste manual do app';
+      const date = dateEl.value;
+      const time = timeEl.value;
+      const note = noteEl.value.trim();
 
-    async function askNotificationPermission() {
-      if (!('Notification' in window)) {
-        alert('Este navegador não suporta notificações.');
-        updateNotificationStatus();
-        return;
-      }
+      slackStatus.textContent = 'Status do Slack: enviando teste...';
+
       try {
-        const permission = await Notification.requestPermission();
-        updateNotificationStatus();
-        logDebug(`Permissão de notificação: ${permission}`);
-        if (permission === 'granted') {
-          new Notification('Notificações ativadas', {
-            body: 'Você receberá lembretes das suas tarefas.'
-          });
+        const response = await fetch('/api/test-slack', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            date,
+            time,
+            note
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Falha ao enviar teste para o Slack.');
         }
+
+        slackStatus.textContent = 'Status do Slack: mensagem enviada com sucesso.';
       } catch (error) {
-        logDebug(`Erro ao pedir permissão: ${error.message}`);
+        slackStatus.textContent = 'Status do Slack: erro ao enviar - ' + error.message;
       }
-    }
-
-    function sendNotification(title, body) {
-      if (!('Notification' in window)) return false;
-      if (Notification.permission !== 'granted') return false;
-      try {
-        new Notification(title, { body });
-        logDebug(`Notificação enviada: ${title}`);
-        return true;
-      } catch (error) {
-        logDebug(`Falha ao criar notificação: ${error.message}`);
-        return false;
-      }
-    }
-
-    function maybeNotify(task) {
-      if (!('Notification' in window)) return;
-      if (Notification.permission !== 'granted') return;
-      if (task.done) return;
-      if (task.notified) return;
-
-      const due = getDueDate(task).getTime();
-      const remindAt = due - (Number(task.reminder) * 60000);
-      const now = Date.now();
-      const diffMinutes = Math.round((remindAt - now) / 60000);
-
-      logDebug(`Checando tarefa "${task.title}": faltam ${diffMinutes} min para o lembrete.`);
-
-      if (now >= remindAt && now <= due + NOTIFICATION_GRACE_MS) {
-        const sent = sendNotification(
-          'Lembrete de tarefa',
-          `${task.title} em ${formatDateTime(`${task.date}T${task.time}`)}`
-        );
-
-        if (sent) {
-          task.notified = true;
-          saveTasks();
-          renderTasks();
-        }
-      }
-    }
-
-    function checkReminders() {
-      logDebug(`Rodando verificação. Página ${document.visibilityState}. Total de tarefas: ${tasks.length}.`);
-      tasks.forEach(maybeNotify);
-    }
-
-    function startReminderLoop() {
-      if (intervalId) clearInterval(intervalId);
-      intervalId = setInterval(checkReminders, CHECK_INTERVAL_MS);
-      logDebug(`Loop de lembretes iniciado a cada ${CHECK_INTERVAL_MS / 1000}s.`);
     }
 
     function addOrUpdateTask() {
@@ -526,7 +276,6 @@
           reminder,
           notified: false
         } : task);
-        logDebug(`Tarefa atualizada: ${title}`);
       } else {
         tasks.push({
           id: crypto.randomUUID(),
@@ -538,12 +287,10 @@
           done: false,
           notified: false
         });
-        logDebug(`Tarefa criada: ${title}`);
       }
 
       saveTasks();
       renderTasks();
-      checkReminders();
       resetForm();
     }
 
@@ -551,14 +298,12 @@
       tasks = tasks.map(task => task.id === id ? { ...task, done: !task.done } : task);
       saveTasks();
       renderTasks();
-      logDebug(`Status da tarefa alterado: ${id}`);
     }
 
     window.removeTask = function(id) {
       tasks = tasks.filter(task => task.id !== id);
       saveTasks();
       renderTasks();
-      logDebug(`Tarefa removida: ${id}`);
     }
 
     window.editTask = function(id) {
@@ -572,45 +317,21 @@
       saveBtn.dataset.editing = id;
       saveBtn.textContent = 'Atualizar tarefa';
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      logDebug(`Editando tarefa: ${task.title}`);
     }
 
     clearDoneBtn.addEventListener('click', () => {
       tasks = tasks.filter(task => !task.done);
       saveTasks();
       renderTasks();
-      logDebug('Tarefas concluídas removidas.');
     });
 
     saveBtn.addEventListener('click', addOrUpdateTask);
-    notifyBtn.addEventListener('click', askNotificationPermission);
-    testNotifyBtn.addEventListener('click', () => {
-      const ok = sendNotification('Teste manual', 'Se você viu isso, a notificação do navegador está funcionando.');
-      if (!ok) {
-        alert('A notificação de teste falhou. Verifique a permissão do navegador.');
-      }
-    });
-    checkNowBtn.addEventListener('click', checkReminders);
+    testSlackBtn.addEventListener('click', testSlack);
     filterEl.addEventListener('change', renderTasks);
     searchEl.addEventListener('input', renderTasks);
 
-    document.addEventListener('visibilitychange', () => {
-      logDebug(`Visibilidade alterada para: ${document.visibilityState}`);
-      if (document.visibilityState === 'visible') {
-        checkReminders();
-      }
-    });
-
-    window.addEventListener('focus', () => {
-      logDebug('Janela voltou ao foco.');
-      checkReminders();
-    });
-
     loadTasks();
     renderTasks();
-    updateNotificationStatus();
-    checkReminders();
-    startReminderLoop();
   </script>
 </body>
 </html>
