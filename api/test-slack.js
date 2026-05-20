@@ -9,9 +9,13 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'SLACK_WEBHOOK_URL não configurada na Vercel.' });
   }
 
-  const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-  const { title, date, time, note } = body;
-  const text = [
+  let body = req.body || {};
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body || '{}'); } catch { body = {}; }
+  }
+
+  const { title, date, time, note, slackText } = body;
+  const text = slackText || [
     '📌 *Teste de lembrete do app*',
     `*Título:* ${title || 'Sem título'}`,
     date && time ? `*Quando:* ${date} ${time}` : null,
