@@ -15,6 +15,7 @@
       --primary-hover: #115e59;
       --danger: #b91c1c;
       --success: #15803d;
+      --info: #1d4ed8;
       --shadow: 0 8px 24px rgba(0,0,0,0.08);
       --radius: 12px;
     }
@@ -102,9 +103,15 @@
     }
 
     .btn-primary:hover { background: var(--primary-hover); }
+
     .btn-secondary {
       background: #e7e7e7;
       color: var(--text);
+    }
+
+    .btn-info {
+      background: #dbeafe;
+      color: var(--info);
     }
 
     .toolbar {
@@ -125,6 +132,17 @@
       font-size: 14px;
       color: var(--muted);
       margin-top: 10px;
+    }
+
+    .debug {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      font-size: 13px;
+      color: #334155;
+      white-space: pre-wrap;
     }
 
     .task-list {
@@ -244,7 +262,13 @@
         <button id="notifyBtn" class="btn-secondary">Ativar notificações</button>
       </div>
 
+      <div class="grid two" style="margin-top:12px;">
+        <button id="testNotifyBtn" class="btn-info">Testar notificação</button>
+        <button id="checkNowBtn" class="btn-secondary">Verificar lembretes agora</button>
+      </div>
+
       <p id="notifyStatus" class="status">Status das notificações: não verificado.</p>
+      <div id="debugBox" class="debug">Logs de depuração aparecerão aqui.</div>
     </section>
 
     <section class="card">
@@ -270,6 +294,9 @@
 
   <script>
     const STORAGE_KEY = 'todo-simples-tasks';
+    const CHECK_INTERVAL_MS = 15000;
+    const NOTIFICATION_GRACE_MS = 5 * 60 * 1000;
+
     const titleEl = document.getElementById('title');
     const dateEl = document.getElementById('date');
     const timeEl = document.getElementById('time');
@@ -277,19 +304,32 @@
     const reminderEl = document.getElementById('reminder');
     const saveBtn = document.getElementById('saveBtn');
     const notifyBtn = document.getElementById('notifyBtn');
+    const testNotifyBtn = document.getElementById('testNotifyBtn');
+    const checkNowBtn = document.getElementById('checkNowBtn');
     const notifyStatus = document.getElementById('notifyStatus');
+    const debugBox = document.getElementById('debugBox');
     const taskList = document.getElementById('taskList');
     const filterEl = document.getElementById('filter');
     const searchEl = document.getElementById('search');
     const clearDoneBtn = document.getElementById('clearDone');
 
     let tasks = [];
+    let intervalId = null;
+
+    function logDebug(message) {
+      const timestamp = new Date().toLocaleTimeString('pt-BR');
+      const current = debugBox.textContent || '';
+      debugBox.textContent = `[${timestamp}] ${message}\n` + current.split('\n').slice(0, 14).join('\n');
+      console.log('[TODO DEBUG]', message);
+    }
 
     function loadTasks() {
       try {
         tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        logDebug(`Tarefas carregadas: ${tasks.length}`);
       } catch {
         tasks = [];
+        logDebug('Falha ao ler localStorage. Lista reiniciada.');
       }
     }
 
@@ -353,7 +393,7 @@
     }
 
     function escapeHtml(text) {
-      return text
+      return String(text)
         .replaceAll('&', '&amp;')
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
@@ -374,6 +414,12 @@
     function updateNotificationStatus() {
       if (!('Notification' in window)) {
         notifyStatus.textContent = 'Status das notificações: navegador não suporta.';
+        logDebug('Notification API não suportada neste navegador.');
+        return;
+      }
+      if (window.isSecureContext === false) {
+        notifyStatus.textContent = 'Status das notificações: página sem contexto seguro (HTTPS).';
+        logDebug('Página sem contexto seguro. Notificações podem falhar fora de HTTPS.');
         return;
       }
       if (Notification.permission === 'granted') {
@@ -391,12 +437,30 @@
         updateNotificationStatus();
         return;
       }
-      const permission = await Notification.requestPermission();
-      updateNotificationStatus();
-      if (permission === 'granted') {
-        new Notification('Notificações ativadas', {
-          body: 'Você receberá lembretes das suas tarefas.'
-        });
+      try {
+        const permission = await Notification.requestPermission();
+        updateNotificationStatus();
+        logDebug(`Permissão de notificação: ${permission}`);
+        if (permission === 'granted') {
+          new Notification('Notificações ativadas', {
+            body: 'Você receberá lembretes das suas tarefas.'
+          });
+        }
+      } catch (error) {
+        logDebug(`Erro ao pedir permissão: ${error.message}`);
+      }
+    }
+
+    function sendNotification(title, body) {
+      if (!('Notification' in window)) return false;
+      if (Notification.permission !== 'granted') return false;
+      try {
+        new Notification(title, { body });
+        logDebug(`Notificação enviada: ${title}`);
+        return true;
+      } catch (error) {
+        logDebug(`Falha ao criar notificação: ${error.message}`);
+        return false;
       }
     }
 
@@ -409,19 +473,33 @@
       const due = getDueDate(task).getTime();
       const remindAt = due - (Number(task.reminder) * 60000);
       const now = Date.now();
+      const diffMinutes = Math.round((remindAt - now) / 60000);
 
-      if (now >= remindAt && now <= due + 60000) {
-        new Notification('Lembrete de tarefa', {
-          body: `${task.title} em ${formatDateTime(`${task.date}T${task.time}`)}`
-        });
-        task.notified = true;
-        saveTasks();
-        renderTasks();
+      logDebug(`Checando tarefa "${task.title}": faltam ${diffMinutes} min para o lembrete.`);
+
+      if (now >= remindAt && now <= due + NOTIFICATION_GRACE_MS) {
+        const sent = sendNotification(
+          'Lembrete de tarefa',
+          `${task.title} em ${formatDateTime(`${task.date}T${task.time}`)}`
+        );
+
+        if (sent) {
+          task.notified = true;
+          saveTasks();
+          renderTasks();
+        }
       }
     }
 
     function checkReminders() {
+      logDebug(`Rodando verificação. Página ${document.visibilityState}. Total de tarefas: ${tasks.length}.`);
       tasks.forEach(maybeNotify);
+    }
+
+    function startReminderLoop() {
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(checkReminders, CHECK_INTERVAL_MS);
+      logDebug(`Loop de lembretes iniciado a cada ${CHECK_INTERVAL_MS / 1000}s.`);
     }
 
     function addOrUpdateTask() {
@@ -448,6 +526,7 @@
           reminder,
           notified: false
         } : task);
+        logDebug(`Tarefa atualizada: ${title}`);
       } else {
         tasks.push({
           id: crypto.randomUUID(),
@@ -459,10 +538,12 @@
           done: false,
           notified: false
         });
+        logDebug(`Tarefa criada: ${title}`);
       }
 
       saveTasks();
       renderTasks();
+      checkReminders();
       resetForm();
     }
 
@@ -470,12 +551,14 @@
       tasks = tasks.map(task => task.id === id ? { ...task, done: !task.done } : task);
       saveTasks();
       renderTasks();
+      logDebug(`Status da tarefa alterado: ${id}`);
     }
 
     window.removeTask = function(id) {
       tasks = tasks.filter(task => task.id !== id);
       saveTasks();
       renderTasks();
+      logDebug(`Tarefa removida: ${id}`);
     }
 
     window.editTask = function(id) {
@@ -489,24 +572,45 @@
       saveBtn.dataset.editing = id;
       saveBtn.textContent = 'Atualizar tarefa';
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      logDebug(`Editando tarefa: ${task.title}`);
     }
 
     clearDoneBtn.addEventListener('click', () => {
       tasks = tasks.filter(task => !task.done);
       saveTasks();
       renderTasks();
+      logDebug('Tarefas concluídas removidas.');
     });
 
     saveBtn.addEventListener('click', addOrUpdateTask);
     notifyBtn.addEventListener('click', askNotificationPermission);
+    testNotifyBtn.addEventListener('click', () => {
+      const ok = sendNotification('Teste manual', 'Se você viu isso, a notificação do navegador está funcionando.');
+      if (!ok) {
+        alert('A notificação de teste falhou. Verifique a permissão do navegador.');
+      }
+    });
+    checkNowBtn.addEventListener('click', checkReminders);
     filterEl.addEventListener('change', renderTasks);
     searchEl.addEventListener('input', renderTasks);
+
+    document.addEventListener('visibilitychange', () => {
+      logDebug(`Visibilidade alterada para: ${document.visibilityState}`);
+      if (document.visibilityState === 'visible') {
+        checkReminders();
+      }
+    });
+
+    window.addEventListener('focus', () => {
+      logDebug('Janela voltou ao foco.');
+      checkReminders();
+    });
 
     loadTasks();
     renderTasks();
     updateNotificationStatus();
     checkReminders();
-    setInterval(checkReminders, 30000);
+    startReminderLoop();
   </script>
 </body>
 </html>
